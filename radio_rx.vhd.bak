@@ -1,0 +1,108 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.std_logic_unsigned.all;
+--use IEEE.std_logic_signed.all;
+use IEEE.std_logic_arith.all;
+
+entity radio_rx is
+	 port(
+	 CLK : in STD_LOGIC;
+	 RSTn : in STD_LOGIC;
+	 Radio_p : in STD_LOGIC;
+	 TX : out STD_LOGIC
+	 );
+end radio_rx;
+
+--}} End of automatically maintained section
+
+architecture radio_rx of radio_rx is
+constant Fd : integer := 200;
+constant F1 : integer := 26;
+constant F2 : integer := 28;
+constant N  : integer := 12;
+constant add_val1 : std_logic_vector(N-1 downto 0) := conv_std_logic_vector(F1*4096/Fd, N);
+constant add_val2 : std_logic_vector(N-1 downto 0) := conv_std_logic_vector(F2*4096/Fd, N);
+signal   Re_sum1 : integer range -2*Fd to 2*Fd;
+signal   Re_sum2 : integer range -2*Fd to 2*Fd;
+signal   Im_sum1 : integer range -2*Fd to 2*Fd;
+signal   Im_sum2 : integer range -2*Fd to 2*Fd;
+signal   sin1 : std_logic_vector(N-1 downto 0);
+signal   sin2 : std_logic_vector(N-1 downto 0);
+
+signal   cnt : integer range 0 to Fd+1;
+begin
+	
+	main: process(CLK, RSTn)
+	variable cos : std_logic_vector(N-1 downto 0);
+	variable result1 : integer range 0 to 2*Fd;
+	variable result2 : integer range 0 to 2*Fd;
+	variable cos1 : std_logic;
+	variable cos2 : std_logic;
+	begin
+		if RSTn='0' then
+			cnt <= 0;
+			sin1 <= (others => '0');
+			sin2 <= (others => '0');
+			Re_sum1 <= 0;
+			Re_sum2 <= 0;
+			Im_sum1 <= 0;
+			Im_sum2 <= 0;
+			TX <= '1';
+		elsif rising_edge(CLK) then
+			sin1 <= sin1 + add_val1;
+			sin2 <= sin2 + add_val2;
+			cos := sin1 + 1024;
+			cos1 := cos(N-1);
+			cos := sin2 + 1024;
+			cos2 := cos(N-1);
+			
+			if cnt=Fd+1 then
+				cnt <= 0;
+				sin1 <= add_val1;
+				sin2 <= add_val2;
+				Re_sum1 <= 0;
+				Re_sum2 <= 0;
+				Im_sum1 <= 0;
+				Im_sum2 <= 0;
+				
+				result1 := abs(Re_sum1) + abs(Im_sum1);
+				result2 := abs(Re_sum2) + abs(Im_sum2);
+				if result1>result2 then
+					TX <= '1';
+				else
+					TX <= '0';
+				end if;
+			else
+				if (Radio_p xor sin1(N-1))='1' then
+					Re_sum1 <= Re_sum1 - 1;
+				else
+					Re_sum1 <= Re_sum1 + 1;
+				end if;
+				
+				if (Radio_p xor sin2(N-1))='1' then
+					Re_sum2 <= Re_sum2 - 1;
+				else
+					Re_sum2 <= Re_sum2 + 1;
+				end if;
+					
+				if (Radio_p xor cos1)='1' then
+					Im_sum1 <= Im_sum1 - 1;
+				else
+					Im_sum1 <= Im_sum1 + 1;
+				end if;
+				
+				if (Radio_p xor cos2)='1' then
+					Im_sum2 <= Im_sum2 - 1;
+				else
+					Im_sum2 <= Im_sum2 + 1;
+				end if;
+
+				cnt <= cnt + 1; -- !!!
+			end if;
+			
+		end if;
+	end process;
+	
+	TX <= '1';
+end radio_rx;

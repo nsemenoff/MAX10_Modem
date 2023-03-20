@@ -1,0 +1,23 @@
+Quartus Prime Archive log --	/home/nick/Quartus/MAX10_Modem/MAX10_Modem_TX.qarlog
+
+Archive:	/home/nick/Quartus/MAX10_Modem/MAX10_Modem_TX.qar
+Date:		Fri Apr 24 13:58:07 2020
+Quartus Prime		18.0.0 Build 614 04/24/2018 SJ Lite Edition
+
+	=========== Files Selected: ===========
+/home/nick/Quartus/MAX10_Modem/GEN_UART.tdf
+/home/nick/Quartus/MAX10_Modem/MAX10_Modem.bdf
+/home/nick/Quartus/MAX10_Modem/MAX10_Modem.qpf
+/home/nick/Quartus/MAX10_Modem/MAX10_Modem.qsf
+/home/nick/Quartus/MAX10_Modem/PLL50TO200.bsf
+/home/nick/Quartus/MAX10_Modem/PLL50TO200.ppf
+/home/nick/Quartus/MAX10_Modem/PLL50TO200.qip
+/home/nick/Quartus/MAX10_Modem/PLL50TO200.v
+/home/nick/Quartus/MAX10_Modem/PLL50TO200_bb.v
+/home/nick/Quartus/MAX10_Modem/radio_rx.vhd
+/home/nick/Quartus/MAX10_Modem/radio_tx.vhd
+/home/nick/intelFPGA_lite/18.0/quartus/linux64/assignment_defaults.qdf
+	======= Total: 12 files to archive =======
+
+	================ Status: ===============
+All files archived successfully.

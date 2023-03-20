@@ -1,0 +1,50 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity radio_tx is
+	 port(
+	 CLK200M : in STD_LOGIC;
+	 RSTn : in STD_LOGIC;
+	 RX : in STD_LOGIC;
+	 Radio_P : out STD_LOGIC;
+	 Radio_N : out STD_LOGIC
+	 );
+end radio_tx;
+
+--}} End of automatically maintained section
+
+architecture radio_tx of radio_tx is
+begin
+
+	main: process(CLK200M)
+	variable C27p : std_logic;
+	variable C27n : std_logic;
+	variable cnt27M : integer range 0 to 16;
+	variable max_cnt : integer range 0 to 16;
+	begin
+		if RSTn='0' then
+			cnt27M := 0;
+			C27p := '0';
+			C27n := '0';
+		elsif rising_edge(CLK200M) then
+			if RX='1' then
+				max_cnt := 16;
+			else
+				max_cnt := 8;
+			end if;
+			
+			if cnt27M=max_cnt then
+				cnt27M := 0;
+				C27p := not C27p;
+				C27n := not C27p;
+				Radio_P <= C27p;
+				Radio_N <= C27n;
+			else
+				cnt27M := cnt27M + 1;
+			end if;
+				
+		end if;
+	end process;
+
+end radio_tx;

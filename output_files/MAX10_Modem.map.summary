@@ -1,0 +1,16 @@
+Analysis & Synthesis Status : Successful - Thu May  7 11:44:35 2020
+Quartus Prime Version : 18.0.0 Build 614 04/24/2018 SJ Lite Edition
+Revision Name : MAX10_Modem
+Top-level Entity Name : MAX10_Modem
+Family : MAX 10
+Total logic elements : 1,383
+    Total combinational functions : 869
+    Dedicated logic registers : 1,034
+Total registers : 1034
+Total pins : 16
+Total virtual pins : 0
+Total memory bits : 278,528
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 1
+UFM blocks : 0
+ADC blocks : 0

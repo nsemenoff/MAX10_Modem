@@ -1,0 +1,12 @@
+include "lpm_counter";
+
+subdesign led_blink(CLK:input; LED[5..1]:OUTPUT);
+variable
+	cnt : lpm_counter WITH (LPM_WIDTH=23);
+	led_cnt : lpm_counter WITH (LPM_WIDTH=5);
+begin
+  cnt. clock = CLK;
+  led_cnt. clock = CLK;
+  led_cnt. cnt_en = cnt. cout;
+  LED[] = led_cnt.q[];
+end;
